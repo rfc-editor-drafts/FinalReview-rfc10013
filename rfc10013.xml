@@ -1,15 +1,17 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
+
 <!DOCTYPE rfc [
   <!ENTITY nbsp    "&#160;">
   <!ENTITY zwsp   "&#8203;">
   <!ENTITY nbhy   "&#8209;">
   <!ENTITY wj     "&#8288;">
 ]>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-rats-eat-measured-component-12" number="0000" category="std" updates="" obsoletes="" consensus="true" submissionType="IETF" tocInclude="true" sortRefs="true" symRefs="true" version="3" xml:lang="en">
+
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" ipr="trust200902" docName="draft-ietf-rats-eat-measured-component-12" number="10013" category="std" updates="" obsoletes="" consensus="true" submissionType="IETF" tocInclude="true" sortRefs="true" symRefs="true" version="3" xml:lang="en">
 
   <front>
     <title abbrev="EAT Measured Component">Entity Attestation Token (EAT) Measured Component</title>
-    <seriesInfo name="RFC" value="0000"/>
+    <seriesInfo name="RFC" value="10013"/>
     <author initials="S." surname="Frost" fullname="Simon Frost">
       <organization>Arm</organization>
       <address>
@@ -34,7 +36,7 @@
         <email>henk.birkholz@ietf.contact</email>
       </address>
     </author>
-    <date year="2026" month="February"/>
+    <date year="2026" month="June"/>
     <area>SEC</area>
     <workgroup>rats</workgroup>
 
@@ -48,56 +50,47 @@
 <t>The term "measured component" refers to an object within the attester's target environment whose state can be sampled and typically digested using a cryptographic hash function.
 Examples of measured components include firmware stored in flash memory, software loaded into memory at start time, data stored in a file system, or values in a CPU register.
 This document provides the information model for the "measured component" and two associated data models.
-This separation is intentional: the JSON and CBOR serializations, coupled with the media types and associated Constrained Application Protocol (CoAP) Content-Formats, enable the immediate use of the semantics within the Entity Attestation Token (EAT) framework.
+This separation is intentional: The JSON and Concise Binary Object Representation (CBOR) serializations, coupled with the media types and associated Constrained Application Protocol (CoAP) Content-Formats, enable the immediate use of the semantics within the Entity Attestation Token (EAT) framework.
 Meanwhile, the information model can be reused in future specifications to provide additional serializations, for example, using ASN.1.</t>
     </abstract>
-    <note removeInRFC="true">
-      <name>Discussion Venues</name>
-      <t>Discussion of this document takes place on the
-    Remote ATtestation ProcedureS Working Group mailing list (rats@ietf.org),
-    which is archived at <eref target="https://mailarchive.ietf.org/arch/browse/rats/"/>.</t>
-      <t>Source for this draft and an issue tracker can be found at
-    <eref target="https://github.com/thomas-fossati/draft-fft-rats-eat-measured-component"/>.</t>
-    </note>
   </front>
   <middle>
-    <?line 81?>
 
-<section anchor="introduction">
+    <section anchor="introduction">
       <name>Introduction</name>
       <t><xref section="4.2.16" sectionFormat="of" target="RFC9711"/> defines a <tt>Measurements</tt> claim that:</t>
       <blockquote>
-        <t>[c]ontains descriptions, lists, evidence or measurements of the software that exists on the entity or any other measurable subsystem of the entity</t>
+        <t>[c]ontains descriptions, lists, evidence, or measurements of the software that exists on the entity or on any other measurable subsystem of the entity</t>
       </blockquote>
       <t>This claim allows for different measurement formats, each identified by a different CoAP Content-Format (<xref section="12.3" sectionFormat="of" target="RFC7252"/>).
 Currently, the only specified format is Concise Software Identification (CoSWID) Tags of type "evidence", as per <xref section="2.9.4" sectionFormat="of" target="RFC9393"/>.
 However, CoSWID is not suitable for measurements that cannot be anchored to a file system, such as those in early boot environments.
 To address this gap, this document introduces a "measured component" format that can be used with the EAT <tt>Measurements</tt> claim alongside or instead of CoSWID.</t>
       <t>The term "measured component" refers to an object within the attester's target environment whose state can be sampled and typically digested using a cryptographic hash function.
-This includes, for example: the invariant part of a firmware component that is loaded in memory at startup time, a run-time integrity check (RTIC), a file system object, or a CPU register.</t>
+For example, this includes the invariant part of a firmware component that is loaded in memory at startup time, a Run-Time Integrity Check (RTIC), a file system object, or a CPU register.</t>
       <t>This document provides the information model for the "measured component" and two associated data models <xref target="RFC3444"/>.
-This separation is intentional: the JSON and CBOR serializations, coupled with the media types and associated CoAP Content-Formats, enable the immediate use of the semantics within the EAT framework.
+This separation is intentional: The JSON and CBOR serializations, coupled with the media types and associated CoAP Content-Formats, enable the immediate use of the semantics within the EAT framework.
 Meanwhile, the information model can be reused in future specifications to provide additional serializations, for example, using ASN.1. This approach is consistent with the guidance in <xref section="5.2" sectionFormat="of" target="I-D.ietf-opsawg-rfc5706bis"/>.</t>
     </section>
     <section anchor="conventions-and-definitions">
       <name>Conventions and Definitions</name>
         <t>
-    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-    NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
-    "MAY", and "OPTIONAL" in this document are to be interpreted as
-    described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> 
+    The key words "<bcp14>MUST</bcp14>", "<bcp14>MUST NOT</bcp14>", "<bcp14>REQUIRED</bcp14>", "<bcp14>SHALL</bcp14>", "<bcp14>SHALL
+    NOT</bcp14>", "<bcp14>SHOULD</bcp14>", "<bcp14>SHOULD NOT</bcp14>", "<bcp14>RECOMMENDED</bcp14>", "<bcp14>NOT RECOMMENDED</bcp14>",
+    "<bcp14>MAY</bcp14>", and "<bcp14>OPTIONAL</bcp14>" in this document are to be interpreted as
+    described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> 
     when, and only when, they appear in all capitals, as shown here.
         </t>
-<t>In this document, CDDL <xref target="RFC8610"/> <xref target="RFC9165"/> <xref target="RFC9741"/> is used to describe the data formats.
+<t>In this document, Concise Data Definition Language (CDDL) <xref target="RFC8610"/> <xref target="RFC9165"/> <xref target="RFC9741"/> is used to describe the data formats.
 This specification uses the following CDDL control operators: <tt>.b64u</tt> defined in <xref section="2.1" sectionFormat="of" target="RFC9741"/>, <tt>.json</tt> defined in <xref section="2.4" sectionFormat="of" target="RFC9741"/>, and <tt>.cbor</tt> defined in <xref section="3.8.4" sectionFormat="of" target="RFC8610"/>.</t>
       <t>Examples are folded following the conventions in <xref target="RFC8792"/>.</t>
     </section>
     <section anchor="measured-component">
       <name>Information Model</name>
       <t>This section presents the information model of a "measured component".</t>
-      <t>A "measured component" information element includes the component's sampled state (in digested or raw form) along with metadata that helps in identifying the component.
+      <t>A "measured component" Information Element (IE) includes the component's sampled state (in digested or raw form) along with metadata that helps in identifying the component.
 Optionally, any entities responsible for signing the installed component can also be specified.</t>
-      <t>The information elements (IEs) that constitute a "measured component" are described in <xref target="tab-mc-info-elems"/>.</t>
+      <t>The IEs that constitute a "measured component" are described in <xref target="tab-mc-info-elems"/>.</t>
       <table anchor="tab-mc-info-elems">
         <name>Measured Component Information Elements</name>
         <thead>
@@ -110,7 +103,7 @@ Optionally, any entities responsible for signing the installed component can als
         <tbody>
           <tr>
             <td align="left">Component Name</td>
-            <td align="left">The name given to the measured component. It is important that this name remains consistent across different releases to allow for better tracking of the same measured item across updates. When combined with a consistent versioning scheme, it enables better signalling from the appraisal procedure to the relying parties.</td>
+            <td align="left">The name given to the measured component. It is important that this name remains consistent across different releases to allow for better tracking of the same measured item across updates. When combined with a consistent versioning scheme, it enables better signaling from the appraisal procedure to the relying parties.</td>
             <td align="left">
               <bcp14>REQUIRED</bcp14></td>
           </tr>
@@ -150,18 +143,17 @@ Optionally, any entities responsible for signing the installed component can als
 These rules must be strictly followed when creating or validating "measured component" data items.
 When there is variation between CBOR and JSON, the CDDL generic <tt>JC&lt;&gt;</tt>, defined in <xref section="D" sectionFormat="of" target="RFC9711"/>, is used.</t>
       <section anchor="common-types">
-        <name> Common Types</name>
+        <name>Common Types</name>
         <t>The following three basic types are used at various places within the measured component data model:</t>
         <sourcecode type="cddl"><![CDATA[
 bytes-b64u = text .b64u bytes
 bytes8 = bytes .size 8
-bytes8-b64u = text .b64u bytes8
-]]></sourcecode>
+bytes8-b64u = text .b64u bytes8]]></sourcecode>
       </section>
       <section anchor="digest">
         <name>The <tt>digest</tt> Type</name>
         <t>A digest represents the result of a hashing operation together with the hash algorithm used.
-The type of the digest algorithm identifier can be either <tt>int</tt> or <tt>text</tt> and is interpreted according to the <xref target="IANA.named-information"/> registry.
+	The type of the digest algorithm identifier can be either <tt>int</tt> or <tt>text</tt> and is interpreted according to the "Named Information" IANA registry <xref target="IANA.named-information"/>.
 Specifically, <tt>int</tt> values are matched against "ID" entries and <tt>text</tt> values are matched against "Hash Name String" entries.
 Whenever possible, using the <tt>int</tt> encoding is <bcp14>RECOMMENDED</bcp14>.</t>
         <sourcecode type="cddl"><![CDATA[
@@ -170,8 +162,7 @@ digest = [
   val: digest-value-type
 ]
 
-digest-value-type = eat.JC<bytes-b64u, bytes>
-]]></sourcecode>
+digest-value-type = eat.JC<bytes-b64u, bytes>]]></sourcecode>
       </section>
       <section anchor="the-measured-component-data-item">
         <name>The <tt>measured-component</tt> Data Item</name>
@@ -194,8 +185,7 @@ component-id-label = eat.JC<"id", 1>
 digested-measurement-label = eat.JC<"digested-measurement", 2>
 raw-measurement-label = eat.JC<"raw-measurement", 5>
 authorities-label = eat.JC<"authorities", 3>
-flags-label = eat.JC<"flags", 4>
-]]></sourcecode>
+flags-label = eat.JC<"flags", 4>]]></sourcecode>
         <t>The members of the <tt>measured-component</tt> CBOR map / JSON object are:</t>
         <dl newline="true">
           <dt><tt>"id"</tt> (index 1):</dt>
@@ -214,7 +204,7 @@ Therefore, a decoder implementation may decide to limit the amount of memory it 
           </dd>
           <dt><tt>"flags"</tt> (index 4):</dt>
           <dd>
-            <t>a 64-bit field with profile-defined semantics, see <xref target="profile-flags"/>.</t>
+            <t>A 64-bit field with profile-defined semantics, see <xref target="profile-flags"/>.</t>
           </dd>
         </dl>
         <section anchor="component-id">
@@ -226,29 +216,28 @@ component-id = [
   ? version: version
 ]
 
-;# import coswid.$version-scheme from rfc9393 as coswid
+;# import coswid.$version-scheme from RFC 9393 as coswid
 
 version = [
   val:      text
   ? scheme: coswid.$version-scheme
-]
-]]></sourcecode>
+]]]></sourcecode>
           <dl>
-            <dt><tt>name</tt></dt>
+            <dt><tt>name:</tt></dt>
             <dd>
-              <t>A string that provides a human readable identifier for the component in question.  Format and adopted conventions depend on the component type.</t>
+              <t>A string that provides a human-readable identifier for the component in question.  Format and adopted conventions depend on the component type.</t>
             </dd>
-            <dt><tt>version</tt></dt>
+            <dt><tt>version:</tt></dt>
             <dd>
-              <t>A compound <tt>version</tt> data item that reuses the encoding and semantics of <xref target="RFC9711"/> <tt>sw-version-type</tt>, extending it to non-software components.
-(Note that the complete definition of <tt>sw-version-type</tt> depends on the <tt>$version-scheme</tt> CDDL socket defined in <xref section="2.2" sectionFormat="of" target="RFC9393"/>.)</t>
-            </dd>
-          </dl>
+          <t>A compound <tt>version</tt> data item that reuses the encoding and semantics of <tt>sw-version-type</tt> from <xref target="RFC9711"/>, extending it to non-software components.</t></dd></dl>
+	      <aside><t>
+Note that the complete definition of <tt>sw-version-type</tt> depends on the <tt>$version-scheme</tt> CDDL socket defined in <xref section="2.2" sectionFormat="of" target="RFC9393"/>.</t></aside>
+            
         </section>
         <section anchor="authority">
           <name>Authority Identifier</name>
           <t>An authority is an entity that can authoritatively identify a given component by digitally signing it.
-This signature is typically verified during installation (<xref section="7" sectionFormat="of" target="RFC9019"/>), or when the measured component is executed by the boot firmware, operating system, or application launcher, as in the case of Unified Extensible Firmware Interface (UEFI) Secure Boot <xref target="UEFI2"/> and Arm Trusted Board Boot <xref target="TBBR-CLIENT"/>.
+This signature is typically verified during installation (<xref section="7" sectionFormat="of" target="RFC9019"/>) or when the measured component is executed by the boot firmware, operating system, or application launcher, as in the case of Unified Extensible Firmware Interface (UEFI) Secure Boot <xref target="UEFI2"/> and Arm Trusted Board Boot <xref target="TBBR-CLIENT"/>.
 Another example may be the controlling entity in an app store.
 Note that this signature is in no way related to the attester's signature on the EAT-formatted evidence.
 By extension, an authority identifier does not, by itself, indicate the signer of the enclosing EAT-formatted evidence.</t>
@@ -258,21 +247,19 @@ In some cases, multiple parties may need to sign a component to indicate their e
 This could include roles such as a firmware update system, fleet owner, or third-party auditor.
 The specific purpose of each signature may depend on the deployment, and the order of authorities within the array could indicate meaning.</t>
           <t>If an EAT profile (<xref section="6" sectionFormat="of" target="RFC9711"/>) uses measured components, it <bcp14>MUST</bcp14> specify whether the <tt>authorities</tt> field is used.
-If it is used, the profile <bcp14>MUST</bcp14> also specify what each of the entries in the <tt>authorities</tt> array represents, and how to interpret the corresponding <tt>authority-id-type</tt>.</t>
+If it is used, the profile <bcp14>MUST</bcp14> also specify what each of the entries in the <tt>authorities</tt> array represents and how to interpret the corresponding <tt>authority-id-type</tt>.</t>
           <t>The <tt>authority-id-type</tt> is defined as follows:</t>
           <sourcecode type="cddl"><![CDATA[
-authority-id-type = eat.JC<bytes-b64u, bytes>
-]]></sourcecode>
+authority-id-type = eat.JC<bytes-b64u, bytes>]]></sourcecode>
         </section>
         <section anchor="profile-flags">
-          <name>Profile-specific Flags</name>
+          <name>Profile-Specific Flags</name>
           <t>This optional field can contain up to 64 bits of profile-defined semantics, enabling a profile of this specification to encode additional information and extend the base type.
 It can be used to carry information in fixed-size chunks, such as a bit mask or a single value within a predetermined set of codepoints.
 Regardless of its internal structure, the size of this field is exactly 8 bytes.</t>
           <t>The <tt>flags-type</tt> is defined as follows:</t>
           <sourcecode type="cddl"><![CDATA[
-flags-type = eat.JC<bytes8-b64u, bytes8>
-]]></sourcecode>
+flags-type = eat.JC<bytes8-b64u, bytes8>]]></sourcecode>
           <t>If an EAT profile (<xref section="6" sectionFormat="of" target="RFC9711"/>) uses measured components, it <bcp14>MUST</bcp14> specify whether the <tt>flags</tt> field is used.
 If it is used, the profile <bcp14>MUST</bcp14> also specify how to interpret the 64 bits.</t>
         </section>
@@ -281,7 +268,7 @@ If it is used, the profile <bcp14>MUST</bcp14> also specify how to interpret the
         <name>EAT <tt>measurements-format</tt> Extensions</name>
         <t>The CDDL in <xref target="fig-eat-plug"/> extends the <tt>$measurements-body-cbor</tt> and <tt>$measurements-body-json</tt> EAT sockets to add support for <tt>measured-component</tt>s to the <tt>Measurements</tt> claim.</t>
         <figure anchor="fig-eat-plug">
-          <name>EAT measurements-format Extensions</name>
+          <name>EAT <tt>measurements-format</tt> Extensions</name>
           <sourcecode type="cddl"><![CDATA[
 mc-cbor = bytes .cbor measured-component
 mc-json = text .json measured-component
@@ -292,17 +279,16 @@ $measurements-body-cbor /= mc-json ; tunnel
 
 ; EAT JSON (`.feature "json"`)
 $measurements-body-json /= mc-json            ; homogeneous
-$measurements-body-json /= text .b64u mc-cbor ; tunnel
-]]></sourcecode>
+$measurements-body-json /= text .b64u mc-cbor ; tunnel]]></sourcecode>
         </figure>
-        <t>Each socket is extended with two new types: a "homogeneous" representation that is used when <tt>measured-component</tt> and the EAT have the same serialization (e.g., they are both CBOR), and a "tunnel" representation that is used when the serializations differ.</t>
+        <t>Each socket is extended with two new types: a "homogeneous" representation that is used when <tt>measured-component</tt> and the EAT have the same serialization (e.g., they are both CBOR) and a "tunnel" representation that is used when the serializations differ.</t>
       </section>
       <section anchor="measurements-format-for-cbor-eat">
         <name><tt>measurements-format</tt> for CBOR EAT</name>
-        <t>The entries in <xref target="tab-mf-cbor"/> are the allowed <tt>content-type</tt> / <tt>content-format</tt> pairs when the <tt>measured-component</tt> is carried in a CBOR EAT.</t>
-        <t>Note the use of the "homogeneous" and "tunnel" formats from <xref target="fig-eat-plug"/>, and how the associated CoAP Content-Format is used to describe the original serialization.</t>
+        <t>The entries in <xref target="tab-mf-cbor"/> are the allowed <tt>content-type</tt>/<tt>content-format</tt> pairs when the <tt>measured-component</tt> is carried in a CBOR EAT.</t>
+        <t>Note the use of the "homogeneous" and "tunnel" formats from <xref target="fig-eat-plug"/> and how the associated CoAP Content-Format is used to describe the original serialization.</t>
         <table anchor="tab-mf-cbor">
-          <name>measurement-format for EAT CWT</name>
+          <name><tt>measurements-format</tt> for EAT CBOR Web Token (CWT)</name>
           <thead>
             <tr>
               <th align="left">content-type (CoAP C-F equivalent)</th>
@@ -329,7 +315,7 @@ $measurements-body-json /= text .b64u mc-cbor ; tunnel
         <name><tt>measurements-format</tt> for JSON EAT</name>
         <t><xref target="tab-mf-json"/> is the equivalent of <xref target="tab-mf-cbor"/> for JSON-serialized EAT.</t>
         <table anchor="tab-mf-json">
-          <name>measurement-format for EAT JWT</name>
+          <name><tt>measurements-format</tt> for EAT JSON Web Token (JWT)</name>
           <thead>
             <tr>
               <th align="left">content-type (CoAP C-F equivalent)</th>
@@ -383,20 +369,18 @@ $measurements-body-json /= text .b64u mc-cbor ; tunnel
       7a8a5e'
   ],
   / flags / 4: h'0000000000000101'
-}
-]]></sourcecode>
+}]]></sourcecode>
         </figure>
         <t>The example depicted in <xref target="ex-eat-1"/> is the same measured component as above but used as the format of a <tt>measurements</tt> claim in an EAT claims-set.</t>
-        <t>This example uses TBD1 as the <tt>content-type</tt> value of the <tt>measurements-format</tt> entry.</t>
-        <t><cref anchor="rfced">RFC Editor:</cref> Please change TBD1 to the value assigned by IANA to the <tt>measured-component+cbor</tt> Content-Format.</t>
-        <t>Note that the array contains only one measured component, but additional entries could be added if the measured Trusted Compute Base (TCB) is made of multiple, individually measured components.</t>
+        <t>This example uses 295 as the <tt>content-type</tt> value of the <tt>measurements-format</tt> entry.</t>
+        <t>Note that the array contains only one measured component, but additional entries could be added if the measured Trusted Computing Base (TCB) is made of multiple individually measured components.</t>
         <figure anchor="ex-eat-1">
-          <name>EAT Measurements Claim using a Measured Component (CBOR)</name>
+          <name>EAT Measurements Claim Using a Measured Component (CBOR)</name>
           <sourcecode type="cbor-edn"><![CDATA[
 {
   273: [
     [
-      TBD1, / measured-component+cbor /
+      295, / measured-component+cbor /
       <<
         {
           / id / 1: [
@@ -421,21 +405,19 @@ $measurements-body-json /= text .b64u mc-cbor ; tunnel
       >>
     ]
   ]
-}
-]]></sourcecode>
+}]]></sourcecode>
         </figure>
         <t>The example in <xref target="ex-eat-2"/> illustrates the inclusion of a JSON measured component inside a JSON EAT.</t>
-        <t>This example uses TBD2 as the <tt>content-type</tt> value of the <tt>measurements-format</tt> entry.</t>
-        <t><cref anchor="rfced_1">RFC Editor:</cref> Please change TBD2 to the value assigned by IANA to the <tt>measured-component+cbor</tt> Content-Format.</t>
+        <t>This example uses 296 as the <tt>content-type</tt> value of the <tt>measurements-format</tt> entry.</t>
         <figure anchor="ex-eat-2">
-          <name>EAT Measurements Claim using a Measured Component (JSON)</name>
+          <name>EAT Measurements Claim Using a Measured Component (JSON)</name>
           <sourcecode type="cbor-edn"><![CDATA[
 =============== NOTE: '\' line wrapping per RFC 8792 ================
 
 {
   "measurements": [
     [
-      TBD2, / measured-component+json /
+      296, / measured-component+json /
       "{ \"id\": [ \"boot loader X\", [ \"1.2.3rc2\", 16384 ] ], \"\
 digested-measurement\": [ \"sha-256\", \"\
 OZYAPUhvuR_7BW99A_KymSshWzHb569LNzQx_H0xnaM\" ], \"authorities\": [ \
@@ -443,12 +425,11 @@ OZYAPUhvuR_7BW99A_KymSshWzHb569LNzQx_H0xnaM\" ], \"authorities\": [ \
                    Qne7l7p7UVd6DTgVHT4ItAvflGdT9bW964FNb_V6il4\" ] }"
     ]
   ]
-}
-]]></sourcecode>
+}]]></sourcecode>
         </figure>
         <t>The example shown in <xref target="ex-2"/> is a measured component representing a boot loader identified by its path name:</t>
         <figure anchor="ex-2">
-          <name>Digested Measured Component using File Path as Identifier</name>
+          <name>Digested Measured Component Using a File Path as an Identifier</name>
           <sourcecode type="cbor-edn"><![CDATA[
 {
   / id / 1: [
@@ -460,8 +441,7 @@ OZYAPUhvuR_7BW99A_KymSshWzHb569LNzQx_H0xnaM\" ], \"authorities\": [ \
               9cc5e410816283ed60ba573795f5fcc85e513af57b3f6def'
   ],
   / flags / 4: h'0000000000000101'
-}
-]]></sourcecode>
+}]]></sourcecode>
         </figure>
         <t>The example in <xref target="ex-3"/> is a raw measured component.</t>
         <figure anchor="ex-3">
@@ -472,14 +452,13 @@ OZYAPUhvuR_7BW99A_KymSshWzHb569LNzQx_H0xnaM\" ], \"authorities\": [ \
     / name / "hardware-config"
   ],
   / measurement / 5: h'4f6d616861'
-}
-]]></sourcecode>
+}]]></sourcecode>
         </figure>
       </section>
     </section>
     <section anchor="seccons">
       <name>Security Considerations</name>
-      <t>The considerations discussed in Sections <xref target="RFC9711" section="9.1" sectionFormat="bare">Claim Trustworthiness</xref>, <xref target="RFC9711" section="9.4" sectionFormat="bare">Multiple EAT Consumers</xref> and <xref target="RFC9711" section="9.5" sectionFormat="bare">Detached EAT Bundle Digest Security Considerations</xref> of <xref target="RFC9711"/> apply to this document as well.
+      <t>The considerations discussed in Sections <xref target="RFC9711" section="9.1" sectionFormat="bare">Claim Trustworthiness</xref>, <xref target="RFC9711" section="9.4" sectionFormat="bare">Multiple EAT Consumers</xref>, and <xref target="RFC9711" section="9.5" sectionFormat="bare">Detached EAT Bundle Digest Security Considerations</xref> of <xref target="RFC9711"/> apply to this document as well.
 Note that similar security considerations may apply when the Measured Component information model is serialized using different data models than the ones specified in this document.</t>
       <t>The Component Name and Component Version can give an attacker detailed information about the software running on a device and its configuration settings.
 This information could offer an attacker valuable insight.</t>
@@ -495,10 +474,10 @@ Further discussion and references on this topic can be found in <xref section="7
     </section>
     <section anchor="iana-considerations">
       <name>IANA Considerations</name>
-      <t><cref anchor="rfced_2">RFC Editor:</cref> replace "RFCthis" with the RFC number assigned to this document.</t>
+
       <section anchor="media-types-registrations">
-        <name>Media Types Registrations</name>
-        <t>IANA is requested to add the following media types to the "Media Types" registry <xref target="IANA.media-types"/>.</t>
+        <name>Media Type Registrations</name>
+        <t>IANA has added the following media types to the "Media Types" registry <xref target="IANA.media-types"/>.</t>
         <table anchor="tab-mc-regs">
           <name>Measured Component Media Types</name>
           <thead>
@@ -514,20 +493,20 @@ Further discussion and references on this topic can be found in <xref section="7
                 <tt>measured-component+cbor</tt></td>
               <td align="left">
                 <tt>application/measured-component+cbor</tt></td>
-              <td align="left">RFCthis</td>
+              <td align="left">RFC 10013</td>
             </tr>
             <tr>
               <td align="left">
                 <tt>measured-component+json</tt></td>
               <td align="left">
                 <tt>application/measured-component+json</tt></td>
-              <td align="left">RFCthis</td>
+              <td align="left">RFC 10013</td>
             </tr>
           </tbody>
         </table>
         <section anchor="applicationmeasured-componentcbor">
           <name><tt>application/measured-component+cbor</tt></name>
-          <dl spacing="compact">
+          <dl>
             <dt>Type name:</dt>
             <dd>
               <t>application</t>
@@ -538,11 +517,11 @@ Further discussion and references on this topic can be found in <xref section="7
             </dd>
             <dt>Required parameters:</dt>
             <dd>
-              <t>n/a</t>
+              <t>N/A</t>
             </dd>
             <dt>Optional parameters:</dt>
             <dd>
-              <t>n/a</t>
+              <t>N/A</t>
             </dd>
             <dt>Encoding considerations:</dt>
             <dd>
@@ -550,19 +529,19 @@ Further discussion and references on this topic can be found in <xref section="7
             </dd>
             <dt>Security considerations:</dt>
             <dd>
-              <t><xref target="seccons"/> of RFCthis</t>
+              <t><xref target="seccons"/> of RFC 10013</t>
             </dd>
             <dt>Interoperability considerations:</dt>
             <dd>
-              <t>n/a</t>
+              <t>N/A</t>
             </dd>
             <dt>Published specification:</dt>
             <dd>
-              <t>RFCthis</t>
+              <t>RFC 10013</t>
             </dd>
             <dt>Applications that use this media type:</dt>
             <dd>
-              <t>Attesters, Verifiers and Relying Parties</t>
+              <t>Attesters, Verifiers, and Relying Parties</t>
             </dd>
             <dt>Fragment identifier considerations:</dt>
             <dd>
@@ -584,15 +563,12 @@ Further discussion and references on this topic can be found in <xref section="7
             <dd>
               <t>IETF</t>
             </dd>
-            <dt>Provisional registration:</dt>
-            <dd>
-              <t>no</t>
-            </dd>
+
           </dl>
         </section>
         <section anchor="applicationmeasured-componentjson">
           <name><tt>application/measured-component+json</tt></name>
-          <dl spacing="compact">
+          <dl>
             <dt>Type name:</dt>
             <dd>
               <t>application</t>
@@ -603,11 +579,11 @@ Further discussion and references on this topic can be found in <xref section="7
             </dd>
             <dt>Required parameters:</dt>
             <dd>
-              <t>n/a</t>
+              <t>N/A</t>
             </dd>
             <dt>Optional parameters:</dt>
             <dd>
-              <t>n/a</t>
+              <t>N/A</t>
             </dd>
             <dt>Encoding considerations:</dt>
             <dd>
@@ -615,19 +591,19 @@ Further discussion and references on this topic can be found in <xref section="7
             </dd>
             <dt>Security considerations:</dt>
             <dd>
-              <t><xref target="seccons"/> of RFCthis</t>
+              <t><xref target="seccons"/> of RFC 10013</t>
             </dd>
             <dt>Interoperability considerations:</dt>
             <dd>
-              <t>n/a</t>
+              <t>N/A</t>
             </dd>
             <dt>Published specification:</dt>
             <dd>
-              <t>RFCthis</t>
+              <t>RFC 10013</t>
             </dd>
             <dt>Applications that use this media type:</dt>
             <dd>
-              <t>Attesters, Verifiers and Relying Parties</t>
+              <t>Attesters, Verifiers, and Relying Parties</t>
             </dd>
             <dt>Fragment identifier considerations:</dt>
             <dd>
@@ -649,20 +625,18 @@ Further discussion and references on this topic can be found in <xref section="7
             <dd>
               <t>IETF</t>
             </dd>
-            <dt>Provisional registration:</dt>
-            <dd>
-              <t>no</t>
-            </dd>
+
           </dl>
         </section>
       </section>
       <section anchor="measured-component-content-format-registrations">
         <name>Measured Component Content-Format Registrations</name>
-        <t>IANA is requested to register two Content-Format numbers in the "CoAP Content-Formats" sub-registry, within the "Constrained RESTful Environments (CoRE) Parameters" Registry <xref target="IANA.core-parameters"/>, as follows:</t>
-        <table>
+        <t>IANA has registered these two Content-Format numbers in the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group <xref target="IANA.core-parameters"/> as follows:</t>
+<table>
+     <name>Content-Format Number Registrations</name>
           <thead>
             <tr>
-              <th align="left">Content-Type</th>
+              <th align="left">Content Type</th>
               <th align="left">Content Coding</th>
               <th align="left">ID</th>
               <th align="left">Reference</th>
@@ -672,22 +646,22 @@ Further discussion and references on this topic can be found in <xref section="7
             <tr>
               <td align="left">application/measured-component+cbor</td>
               <td align="left">-</td>
-              <td align="left">TBD1</td>
-              <td align="left">RFCthis</td>
+              <td align="left">295</td>
+              <td align="left">RFC 10013</td>
             </tr>
             <tr>
               <td align="left">application/measured-component+json</td>
               <td align="left">-</td>
-              <td align="left">TBD2</td>
-              <td align="left">RFCthis</td>
+              <td align="left">296</td>
+              <td align="left">RFC 10013</td>
             </tr>
           </tbody>
         </table>
-        <t>If possible, TBD1 and TBD2 should be assigned in the 256..9999 range.</t>
       </section>
     </section>
   </middle>
   <back>
+    <displayreference target="I-D.ietf-opsawg-rfc5706bis" to ="OPS-MGMT"/>
     <references anchor="sec-combined-references">
       <name>References</name>
       <references anchor="sec-normative-references">
@@ -705,7 +679,6 @@ Further discussion and references on this topic can be found in <xref section="7
             <author>
               <organization/>
             </author>
-            <date year="2013"/>
           </front>
         </reference>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
@@ -732,6 +705,7 @@ Further discussion and references on this topic can be found in <xref section="7
             </author>
             <date year="2022" month="August"/>
           </front>
+          <refcontent>Release 2.10</refcontent>
         </reference>
         <reference anchor="TBBR-CLIENT" target="https://developer.arm.com/documentation/den0006">
           <front>
@@ -744,6 +718,10 @@ Further discussion and references on this topic can be found in <xref section="7
           <seriesInfo name="ARM" value="DEN0006D"/>
         </reference>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9019.xml"/>
+<!-- [I-D.ietf-opsawg-rfc5706bis]
+  draft-ietf-opsawg-rfc5706bis-04
+  IESG State: I-D Exists as of 06/01/26
+-->
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-opsawg-rfc5706bis.xml"/>
         <reference anchor="IANA.media-types" target="https://www.iana.org/assignments/media-types">
           <front>
@@ -763,9 +741,8 @@ Further discussion and references on this topic can be found in <xref section="7
         </reference>
       </references>
     </references>
-    <?line 603?>
 
-<section anchor="collected-cddl">
+    <section anchor="collected-cddl">
       <name>Collected CDDL</name>
       <t>This appendix contains all the CDDL definitions included in this specification.</t>
       <sourcecode type="cddl"><![CDATA[
@@ -816,238 +793,34 @@ coswid.multipartnumeric = 1
 coswid.multipartnumeric-suffix = 2
 coswid.alphanumeric = 3
 coswid.decimal = 4
-coswid.semver = 16384
-]]></sourcecode>
+coswid.semver = 16384]]></sourcecode>
     </section>
-    <section anchor="open-issues">
-      <name>Open Issues</name>
-      <t>The list of currently open issues for this documents can be found at <eref target="https://github.com/ietf-rats-wg/draft-ietf-rats-eat-measured-component/issues"/>.</t>
-      <t><cref>Note to RFC Editor: please remove before publication.</cref></t>
-    </section>
+
     <section numbered="false" anchor="acknowledgments">
       <name>Acknowledgments</name>
       <t>The authors would like to thank
-Carl Wallace,
-Carsten Bormann,
-Charles Nicas,
-Deb Cooley,
-Dionna Glaze,
-Esko Dijk,
-Giridhar Mandyam,
-Gorry Fairhurst,
-Henry Thompson,
-Houda Labiod,
+<contact fullname="Carl Wallace"/>,
+<contact fullname="Carsten Bormann"/>,
+<contact fullname="Charles Nicas"/>,
+<contact fullname="Deb Cooley"/>,
+<contact fullname="Dionna Glaze"/>,
+<contact fullname="Esko Dijk"/>,
+<contact fullname="Giridhar Mandyam"/>,
+<contact fullname="Gorry Fairhurst"/>,
+<contact fullname="Henry Thompson"/>,
+<contact fullname="Houda Labiod"/>,
 <contact fullname="Ionuț Mihalcea"/>,
-Joe Salowey,
-Jun Zhang,
-Laurence Lundblade,
-Mahesh Jethanandani,
-Michael Richardson,
-Mohamed Boucadair,
-Muhammad Usama Sardar
+<contact fullname="Joe Salowey"/>,
+<contact fullname="Jun Zhang"/>,
+<contact fullname="Laurence Lundblade"/>,
+<contact fullname="Mahesh Jethanandani"/>,
+<contact fullname="Michael Richardson"/>,
+<contact fullname="Mohamed Boucadair"/>,
+<contact fullname="Muhammad Usama Sardar"/>,
 and
-Yogesh Deshpande
-for providing comments, reviews and suggestions that greatly improved this document.</t>
-      <t>The authors would also like to thank Ken Takayama for providing an implementation of this specification in the veraison/eat package.</t>
+<contact fullname="Yogesh Deshpande"/>
+for providing comments, reviews, and suggestions that greatly improved this document.</t>
+      <t>The authors would also like to thank <contact fullname="Ken Takayama"/> for providing an implementation of this specification in the veraison/eat package.</t>
     </section>
   </back>
-  <!-- ##markdown-source:
-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
-KmmFjhiYhsDcAzDoANraiS+1D5aPh1rTDIl0u5LKHqwqEssxwC18totxY1cU
-WPhpsNZCSB0iK8TYUmAbJwzbRMBowU/b7NM6iahp5JPqCRlbsVhrnVa/V7oO
-xmkhodm/OEvpQDVLfy6K4epwjTzZuWMtSsghpI/eXKEsfZaTSG0QJ+Wsgwuq
-rgdy5XJaqGxEmb8MiIahLkabxAj/HPJWEeoLDiUFf6KsxFYoTdrulyn9PKc0
-ftMeoqp8rbcpaPNZyvJUeMkw19jxkuWXuglqYqd/9YYxwre8EPAnmqJZ9gn0
-YrcJTNHBqgo4KgYhKN2afx1hz6Y2sJh/zuaYVacoqMifVmy2iHpQySNAHbyt
-bbcFUFZ2XC8vR/5MIqjgoPHTTotuDNT6UOcfSB+KD42O4mZeJNIrUjGqASoM
-VblBEXoRLzLKNhjvARikIfzIwSJbC6Jn+KezR4lN/E6tXC1WoxQONa8n7I+1
-uv7VJEJbejxjtU6z2+wlXlePYawz7O32YYS6Nsla9Birbe/qtGKpOMa6xdI8
-nOLKcsYb3cGwWBP0XovNHvdGo2G73fP7u8OJO+pMJm57MJzs+O3epOt2RyP4
-pzNwex3fFTt80nd7Ow4r/fX6vc7E2/F7nZHPe48LjOz4tsV6BqPZ4/6oK0bu
-cGfodTuTYbvTdTueEO6o3etOhNvv9Dt8d7e9M9rpDQaT4XBn0O4MhDcYeQND
-C493hPe4buB1d3Zcd7Tj8h130Bns7PC239vtDDp+T7R33X7b9SejPsDpTQbu
-wPWFu9vp+8PJxMDb4bt8ICzUicXgv/09AN+2/zrtzmPnPndjkIWMEjg0WdOK
-S+f3ZfaDgCbwUpMLBSBo2TqFZi336BWcyKm7BTwQN0t1u4Rp2yWlQ90FJY1u
-rpSolFrRAgNaOTUXGwxWFHtcHRx1DNQVNV1qSKu2G+hvLAHuz/+ZTDzhv2Ov
-VP+dN+PRVCjgWlPoapukVBlpK2w2yB31jbq5bNwLv0Lnrk36RN/1oi421EPr
-1KwTFa1Y2DhLRUrNp0smKx14Jt95qLvoDnCDW1eHB9t4fHPuE41MskslBm8C
-P6OMcUVoV6VBuju5vBiVgLSrF4K+ShitERj7+utcQO8sUV3VScXzz+mmYtS6
-jjJ/67rK/FXqLPP3zvr2rl7CdIMuKwZU6jQL1y/WbSuImz+j8tZ13AbMN+g8
-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
-M6jzP4/dzy3kZAAA
-
--->
-
 </rfc>
