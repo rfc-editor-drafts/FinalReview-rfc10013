@@ -468,7 +468,7 @@ Further discussion and references on this topic can be found in <xref section="7
     </section>
     <section anchor="privcons">
       <name>Privacy Considerations</name>
-      <t>The differential encryption considerations discussed in Section <xref target="RFC9711" section="9.1" sectionFormat="bare">Multiple EAT Consumers</xref> of <xref target="RFC9711"/> also apply to this document.</t>
+      <t>The differential encryption considerations discussed in Section <xref target="RFC9711" section="9.4" sectionFormat="bare">(Multiple EAT Consumers)</xref> of <xref target="RFC9711"/> also apply to this document.</t>
       <t>The Component Name and Component Version may reveal private information about a device and its owner.</t>
       <t>Additionally, the stability requirement of the Component Name may enable tracking.</t>
     </section>
