@@ -282,7 +282,7 @@ $measurements-body-json /= mc-json            ; homogeneous
 $measurements-body-json /= text .b64u mc-cbor ; tunnel]]></sourcecode>
         </figure>
         <t>Each socket is extended with two new types: a "homogeneous" representation that is used when <tt>measured-component</tt> and the EAT have the same serialization (e.g., they are both CBOR) and a "tunnel" representation that is used when the serializations differ.</t>
-      </section>
+
       <section anchor="measurements-format-for-cbor-eat">
         <name><tt>measurements-format</tt> for CBOR EAT</name>
         <t>The entries in <xref target="tab-mf-cbor"/> are the allowed <tt>content-type</tt>/<tt>content-format</tt> pairs when the <tt>measured-component</tt> is carried in a CBOR EAT.</t>
@@ -338,6 +338,7 @@ $measurements-body-json /= text .b64u mc-cbor ; tunnel]]></sourcecode>
           </tbody>
         </table>
       </section>
+	  </section>
       <section anchor="eat-profiles-and-measured-components">
         <name>EAT Profiles and Measured Components</name>
         <t>The semantics of the <tt>authorities</tt> and profile <tt>flags</tt> fields are defined by the applicable EAT profile, i.e., the profile of the wrapping EAT.</t>
