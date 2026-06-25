@@ -348,7 +348,7 @@ $measurements-body-json /= text .b64u mc-cbor ; tunnel]]></sourcecode>
         <t>The example in <xref target="ex-1"/> is a digested measured component with all the fields populated.</t>
         <figure anchor="ex-1">
           <name>Complete Measured Component</name>
-          <sourcecode type="cbor-edn"><![CDATA[
+          <sourcecode type="cbor-diag"><![CDATA[
 {
   / id / 1: [
     / name / "boot loader X",
@@ -376,7 +376,7 @@ $measurements-body-json /= text .b64u mc-cbor ; tunnel]]></sourcecode>
         <t>Note that the array contains only one measured component, but additional entries could be added if the measured Trusted Computing Base (TCB) is made of multiple individually measured components.</t>
         <figure anchor="ex-eat-1">
           <name>EAT Measurements Claim Using a Measured Component (CBOR)</name>
-          <sourcecode type="cbor-edn"><![CDATA[
+          <sourcecode type="cbor-diag"><![CDATA[
 {
   273: [
     [
@@ -411,7 +411,7 @@ $measurements-body-json /= text .b64u mc-cbor ; tunnel]]></sourcecode>
         <t>This example uses 296 as the <tt>content-type</tt> value of the <tt>measurements-format</tt> entry.</t>
         <figure anchor="ex-eat-2">
           <name>EAT Measurements Claim Using a Measured Component (JSON)</name>
-          <sourcecode type="cbor-edn"><![CDATA[
+          <sourcecode type="cbor-diag"><![CDATA[
 =============== NOTE: '\' line wrapping per RFC 8792 ================
 
 {
@@ -430,7 +430,7 @@ OZYAPUhvuR_7BW99A_KymSshWzHb569LNzQx_H0xnaM\" ], \"authorities\": [ \
         <t>The example shown in <xref target="ex-2"/> is a measured component representing a boot loader identified by its path name:</t>
         <figure anchor="ex-2">
           <name>Digested Measured Component Using a File Path as an Identifier</name>
-          <sourcecode type="cbor-edn"><![CDATA[
+          <sourcecode type="cbor-diag"><![CDATA[
 {
   / id / 1: [
     / name / "/boot/loader.bin"
@@ -446,7 +446,7 @@ OZYAPUhvuR_7BW99A_KymSshWzHb569LNzQx_H0xnaM\" ], \"authorities\": [ \
         <t>The example in <xref target="ex-3"/> is a raw measured component.</t>
         <figure anchor="ex-3">
           <name>Raw Measured Component</name>
-          <sourcecode type="cbor-edn"><![CDATA[
+          <sourcecode type="cbor-diag"><![CDATA[
 {
   / id / 1: [
     / name / "hardware-config"
