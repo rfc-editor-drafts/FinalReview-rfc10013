@@ -216,7 +216,7 @@ component-id = [
   ? version: version
 ]
 
-;# import coswid.$version-scheme from RFC 9393 as coswid
+;# import coswid.$version-scheme from rfc9393 as coswid
 
 version = [
   val:      text
