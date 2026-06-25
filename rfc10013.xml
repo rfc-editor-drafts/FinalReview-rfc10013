@@ -742,8 +742,8 @@ Further discussion and references on this topic can be found in <xref section="7
       </references>
     </references>
 
-    <section anchor="collected-cddl">
-      <name>Collected CDDL</name>
+    <section anchor="collated-cddl">
+      <name>Collated CDDL</name>
       <t>This appendix contains all the CDDL definitions included in this specification.</t>
       <sourcecode type="cddl"><![CDATA[
 =============== NOTE: '\' line wrapping per RFC 8792 ================
