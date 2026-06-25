@@ -153,7 +153,7 @@ bytes8-b64u = text .b64u bytes8]]></sourcecode>
       <section anchor="digest">
         <name>The <tt>digest</tt> Type</name>
         <t>A digest represents the result of a hashing operation together with the hash algorithm used.
-	The type of the digest algorithm identifier can be either <tt>int</tt> or <tt>text</tt> and is interpreted according to the "Named Information" IANA registry <xref target="IANA.named-information"/>.
+	The type of the digest algorithm identifier can be either <tt>int</tt> or <tt>text</tt> and is interpreted according to the "Named Information Hash Algorithm Registry" IANA registry <xref target="IANA.named-information"/>.
 Specifically, <tt>int</tt> values are matched against "ID" entries and <tt>text</tt> values are matched against "Hash Name String" entries.
 Whenever possible, using the <tt>int</tt> encoding is <bcp14>RECOMMENDED</bcp14>.</t>
         <sourcecode type="cddl"><![CDATA[
@@ -685,7 +685,7 @@ Further discussion and references on this topic can be found in <xref section="7
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
         <reference anchor="IANA.named-information" target="https://www.iana.org/assignments/named-information">
           <front>
-            <title>Named Information</title>
+            <title>Named Information Hash Algorithm Registry</title>
             <author>
               <organization>IANA</organization>
             </author>
