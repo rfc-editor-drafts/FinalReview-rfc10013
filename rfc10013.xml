@@ -222,7 +222,7 @@ version = [
   val:      text
   ? scheme: coswid.$version-scheme
 ]]]></sourcecode>
-          <dl>
+          <dl newline="true">
             <dt><tt>name:</tt></dt>
             <dd>
               <t>A string that provides a human-readable identifier for the component in question.  Format and adopted conventions depend on the component type.</t>
