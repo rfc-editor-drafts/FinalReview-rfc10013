@@ -25,8 +25,15 @@
       </address>
     </author>
     <author initials="H." surname="Tschofenig" fullname="Hannes Tschofenig">
-      <organization abbrev="H-BRS">University of Applied Sciences Bonn-Rhein-Sieg</organization>
+      <organization abbrev="UniBw M.">University of the Bundeswehr Munich</organization>
       <address>
+        <postal>
+          <street>Werner-Heisenberg-Weg 39</street>
+          <extaddr>Institute of Distributed Intelligent Systems</extaddr>
+          <city>Neubiberg</city>
+          <code>85577</code>
+          <country>Germany</country>
+        </postal>
         <email>Hannes.Tschofenig@gmx.net</email>
       </address>
     </author>
