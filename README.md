@@ -2,7 +2,7 @@
 
 This repository is for managing document updates for RFC 10013 during Final Review (previously AUTH48). This is part of the [pilot GitHub-based process for Final Review](https://www.rfc-editor.org/rpc/wiki/doku.php?id=rpc_github_roadmap), and it emulates the [current Final Review procedure](https://authors.ietf.org/en/rfc-publication-process). 
 
-Please see the [License](https://github.com/rfc-editor/FinalReview-rfc100113/blob/Approved/LICENSE.md). The [IETF Note Well](https://github.com/rfc-editor/FinalReview-rfc10013/blob/Approved/note-well.md) applies.
+Please see the [License](https://github.com/rfc-editor-drafts/FinalReview-rfc10013/blob/RPC-edits/LICENSE). The [IETF Note Well](https://github.com/rfc-editor-drafts/FinalReview-rfc10013/blob/RPC-edits/note-well.md) applies.
 
 GitHub features that will be used:
 * Issue tracking
